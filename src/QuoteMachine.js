@@ -11,7 +11,7 @@ class QuoteMachine extends Component {
       quote: '',
       visible: true
     }
-    this.END_POINT = 'https://talaikis.com/api/quotes/random/'
+    this.END_POINT = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1'
     this.getRandomQuote = this.getRandomQuote.bind(this)
     this.shareOnTwitter = this.shareOnTwitter.bind(this)
 
@@ -22,17 +22,21 @@ class QuoteMachine extends Component {
     fetch(this.END_POINT)
     .then(response => response.json())
     .then(data => {
-
-      if(data.author && data.quote){
+      console.log(data)
+      if(data){
+        let str = data[0]['content'].replace(/(<p[^>]+?>|<p>|<\/p>)/img, "");
         this.setState({
-          author: data.author,
-          quote: data.quote
+          author: data[0]['title'],
+          quote: str
         });
 
       }
       else{
+
         return console.error('No quote has been found 404')
+
       }
+
     })
 }
 
@@ -91,8 +95,9 @@ class QuoteMachine extends Component {
 
         </a>
         </div>
+
       </div>
-      </body>
+    </body>
       )
 
 
